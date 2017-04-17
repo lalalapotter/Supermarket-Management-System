@@ -1,6 +1,6 @@
 import pymysql
 
-class connection(object):
+class Connection(object):
     def connect_database(self):
         self.connection = pymysql.connect(host='10.221.137.167',
                                      user='root',
@@ -26,7 +26,7 @@ class connection(object):
         return self.cursor.fetchall()
 
 
-database = connection()
+database = Connection()
 
 def exec_staff_login(username,password):
     database.connect_database()

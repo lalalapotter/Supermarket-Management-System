@@ -2,14 +2,12 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import pymysql
 from datetime import datetime
 
-from DatabaseConnection import check_if_account_exists, register_customer
+import DatabaseConnection
 
 time = str(datetime.now())
 
 app = Flask(__name__)
 app.secret_key = 'asfasfasfasqwerqwr'
-
-
 
 
 @app.route('/')
@@ -46,7 +44,7 @@ def staff_login():
 
 
 
-    if check_if_account_exists(username, password):
+    if DatabaseConnection.exec_staff_login(username, password):
         return redirect(url_for('staffone', username=username))
 
     flash("The account does not exist, please retype it!")
@@ -100,7 +98,8 @@ def registeration():
     email = request.form['email']
 
 
-    register_customer(username, password, email)
+
+    DatabaseConnection.exec_register_customer(username, password, email)
     return redirect('/customer_login')
 
 
