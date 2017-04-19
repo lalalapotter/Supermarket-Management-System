@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 import DatabaseConnection
-import transaction
+#import transaction
 
 time = str(datetime.now())
 
@@ -24,13 +24,17 @@ def supplier_login_form():
 def supplier_login():
     username = request.form['username']
     password = request.form['password']
+    
+    (is_valid, supplier_tuple) = DatabaseConnection.exec_supplier_login(username, password)
 
-    if username == 'supplier' and password == 'password':
-
-        return redirect(url_for('supplier', username=username))
-
-    flash("The account does not exist, please retype it!")
+    if is_valid:
+        supplier_id = supplier_tuple[0][0]
+        return redirect(url_for('supplier', supplier_id=supplier_id))
+    
+    flash("The account does not exist, check it again.")
     return redirect('/supplier_login')
+
+
 
 
 @app.route('/staff_login', methods=['GET'])
@@ -61,12 +65,16 @@ def customer_login():
     password = request.form['password']
 
     (is_valid, user_tuple) = DatabaseConnection.exec_customer_login(username, password)
-    user_id = user_tuple[0][0]
+
     if is_valid:
+        user_id = user_tuple[0][0]
         return redirect(url_for('customer', user_id=user_id))
 
     flash("The account does not exist, check it again.")
     return redirect('/customer_login')
+
+#login
+
 
 
 @app.route('/customer/<user_id>', methods=['GET'])
@@ -101,14 +109,33 @@ def complain(user_id=None):
     return render_template('customer.html', user_id=user_id)
 
 
-@app.route('/supplier')
-def supplier(username=None):
-    return render_template("supplier.html")
+@app.route('/supplier/<supplier_id>',methods=['GET'])
+def supplier(supplier_id=None):
+    return render_template("supplier.html",supplier_id=supplier_id)
 
+@app.route('/supplier_info_back/<supplier_id>/info_type/<info_type>')
+def supplier_info_back(supplier_id=None, info_type=None):
+
+    if info_type == "Information":
+        return render_template('supplier_information.html', supplier_id=supplier_id)
+    #elif info_type == "Orders":
+    #   return render_template('supplier_orders.html', supplier_id=supplier_id)
+    #elif info_type == "After_sale_service":
+    #    return render_template('supplier_after_sale_service.html', supplier_id=supplier_id)
+
+#@app.route('/supplier/<supplier_id>', methods=['POST'])
+#def supplier(supplier_id=None):
+#    order_list = request.form['items[]']
+#    return redirect(url_for('supplier', supplier_id=supplier_id))
 
 @app.route('/staffone/<username>')
 def staffone(username=None):
     return render_template("staffone.html", username=username, time=time)
+
+#execute
+
+
+
 
 
 @app.route('/registeration', methods=['GET'])
@@ -133,6 +160,7 @@ def registeration():
     else:
         flash("The username has been registered, Please Try again")
         return redirect('/registeration')
+
 
 
 #
