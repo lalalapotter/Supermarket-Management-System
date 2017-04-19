@@ -51,9 +51,9 @@ drop table if exists supplieracc;
 /*==============================================================*/
 create table complaint
 (
-   comp_id              bigint not null,
+   comp_id              bigint not null AUTO_INCREMENT,
    mem_id               bigint,
-   discount_type        numeric(1,0) not null,
+   comp_type            numeric(1,0) not null,
    comp_ctnt            text not null,
    comp_time            datetime not null,
    primary key (comp_id)
@@ -64,9 +64,9 @@ create table complaint
 /*==============================================================*/
 create table complaint_type
 (
-   discount_type        numeric(1,0) not null,
-   discount_type_name   text not null,
-   primary key (discount_type)
+   comp_type        numeric(1,0) not null,
+   comp_type_name   text not null,
+   primary key (comp_type)
 );
 
 /*==============================================================*/
@@ -155,7 +155,7 @@ create table item
 /*==============================================================*/
 create table memberacc
 (
-   mem_id               bigint not null,
+   mem_id               bigint not null AUTO_INCREMENT,
    mem_name             text not null,
    mem_psw              text not null,
    mem_pnum             text,
@@ -316,5 +316,18 @@ create table supplieracc
    supp_note            text,
    primary key (supp_id)
 );
+
+INSERT INTO memberacc VALUES(1,'sgz','bangbang','15201752137','bangbang@fudan.cn','2017-4-1',0,true,'');
+INSERT INTO memberacc VALUES(2,'wps','peigong','15333333333','peigong@fudan.cn','2017-4-2',0,true,'');
+INSERT INTO memberacc VALUES(3,'zcg','guangguang','13333333333','guanguang@fudan.cn','2017-4-3',0,true,'');
+INSERT INTO memberacc VALUES(4,'zyn','xiaozheng','14444444444','xiaozhengyining@fudan.cn','2017-4-4',0,true,'');
+
+insert into staffacc values(15307130021,'wps',1,'2010-1-1',true,'');
+insert into staffacc values(15307130224,'sgz',1,'2011-1-1',true,'');
+insert into staffacc values(15307130096,'zcg',1,'2012-1-1',true,'');
+
+INSERT INTO item VALUES (1, 'apple', 'big', 'fruit', 'fuji', 10.00, '2017-2-3', '2017-2-6', 'delicious');
+INSERT INTO item VALUES (1, 'pear', 'big', 'fruit', 'lili', 15.00, '2017-2-8', '2017-2-20', 'awful');
+INSERT INTO item VALUES (1, 'bike', 'good', 'sports', 'giant', 1000.00, '', '', 'great');
 
 
